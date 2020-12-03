@@ -1,0 +1,12 @@
+{
+  "cSpell.words": [
+    "cookieparser",
+    "goodreads",
+    "recordset"
+  ],
+  "files.autoSave": "afterDelay",
+  "files.associations": {
+    "*.env.development": "env",
+    "*.env.production": "env"
+  }
+}
