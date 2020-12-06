@@ -1,21 +1,22 @@
 require('dotenv').config();
 const express = require('express');
-const debug = require('debug')('app');
-const chalk = require('chalk');
+const debug = require('debug')('index');
 const mongoose = require('mongoose');
+const chalk = require('chalk');
+// const bodyParser = require('body-parser');
+const Book = require('./models/bookModel.js');
+const bookRouter = require('./routes/bookRouter')(Book);
 
 const app = express();
-const bookRouter = express.Router();
 
 // Read the host address and the port from the environment
 const hostname = process.env.HOST;
 const port = process.env.PORT;
 
-bookRouter.route('/books')
-  .get((req, res) => {
-    const response = { hello: 'This is my API' };
-    res.json(response);
-  });
+mongoose.connect('mongodb://localhost/bookAPI');
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', bookRouter);
 app.get('/', (req, res) => {
