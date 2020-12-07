@@ -1,33 +1,15 @@
 /* eslint-disable no-param-reassign */
 const express = require('express');
-const debug = require('debug')('index');
+const debug = require('debug')('bookRouter');
+
+const booksController = require('../controllers/booksController');
 
 function routes(Book) {
   const bookRouter = express.Router();
-  bookRouter
-    .route('/books')
-    .post((req, res) => {
-      const book = new Book(req.body);
-      // This line is specific to mongoose
-      book.save();
-
-      debug(book);
-      return res.status(201).json(book);
-    })
-    .get((req, res) => {
-      const { query } = req;
-      Book.find(query, (err, books) => {
-        if (err) {
-          return res.send(err);
-        }
-        if (books === undefined || books.length === 0) {
-          return res.send(
-            `Your search query is not found: ${JSON.stringify(query)}`
-          );
-        }
-        return res.json(books);
-      });
-    });
+  const controller = booksController(Book);
+  bookRouter.route('/books')
+    .post(controller.post)
+    .get(controller.get);
   bookRouter.use('/books/:bookId', (req, res, next) => {
     Book.findById(req.params.bookId, (err, book) => {
       if (err) {
@@ -76,6 +58,14 @@ function routes(Book) {
           return res.send(err);
         }
         return res.json(book);
+      });
+    })
+    .delete((req, res) => {
+      req.book.remove((err) => {
+        if (err) {
+          return res.send(err);
+        }
+        return res.sendStatus(204);
       });
     });
 

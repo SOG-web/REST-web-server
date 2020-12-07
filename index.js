@@ -4,7 +4,7 @@ const debug = require('debug')('index');
 const mongoose = require('mongoose');
 const chalk = require('chalk');
 // const bodyParser = require('body-parser');
-const Book = require('./models/bookModel.js');
+const Book = require('./models/bookModel');
 const bookRouter = require('./routes/bookRouter')(Book);
 
 const app = express();
